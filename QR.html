@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador QR Moderno</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
+}
+
+.container {
+    background: rgba(255,255,255,0.1);
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    width: 350px;
+    transition: transform 0.3s ease, box-shadow 0.5s ease;
+}
+
+/* Hover en el contenedor */
+.container:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px 5px #00fff7, 0 0 40px 10px #00c6ff, 0 0 60px 15px #00c6ff88;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #00fff7;
+    text-shadow: 1px 1px 4px #000;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+    text-align: center;
+}
+
+button {
+    width: 48%;
+    padding: 12px;
+    margin: 10px 1%;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+button#generar {
+    background: linear-gradient(45deg, #00fff7, #00c6ff);
+    color: #000;
+}
+
+button#generar:hover {
+    transform: scale(1.05);
+}
+
+button#descargar {
+    background: linear-gradient(45deg, #ff5f6d, #ffc371);
+    color: #000;
+}
+
+button#descargar:hover {
+    transform: scale(1.05);
+}
+
+canvas {
+    margin: 25px auto 0 auto; /* centra horizontalmente */
+    display: block;           /* necesario para centrar */
+    border: 3px solid #fff;
+    border-radius: 15px;
+    width: 200px !important;
+    height: 200px !important;
+    transition: all 0.3s ease, box-shadow 0.5s ease, transform 0.3s ease;
+}
+
+/* Zoom y destello en hover para el QR */
+canvas:hover {
+    transform: scale(1.2) rotate(-2deg);
+    box-shadow: 0 0 20px 5px #00fff7, 0 0 40px 10px #00c6ff;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>✨ Generador QR Moderno ✨</h2>
+    <input type="text" id="url" placeholder="Introduce URL o texto">
+    <br>
+    <button id="generar" onclick="generarQR()">Generar QR</button>
+    <button id="descargar" onclick="descargarQR()">Descargar QR</button>
+    <canvas id="qrcode"></canvas>
+</div>
+
+<script>
+// Crear QR
+let qr = new QRious({
+    element: document.getElementById('qrcode'),
+    size: 200,
+    value: ''
+});
+
+function generarQR() {
+    const url = document.getElementById('url').value.trim();
+    if(url === '') {
+        alert("⚠️ Introduce una URL o texto válido");
+        return;
+    }
+    qr.value = url;
+}
+
+// Descargar QR
+function descargarQR() {
+    if(!qr.value) {
+        alert("⚠️ Primero genera el QR");
+        return;
+    }
+    // Crear enlace temporal
+    const enlace = document.createElement('a');
+    enlace.href = qr.toDataURL('image/png'); // formato PNG
+    enlace.download = 'qr.png';
+    document.body.appendChild(enlace); // necesario para algunos navegadores
+    enlace.click();
+    document.body.removeChild(enlace);
+}
+</script>
+
+</body>
+</html>
